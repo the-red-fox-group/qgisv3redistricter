@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ArrowsmithRedistrictDlgToolbox</class>
- <widget class="QDialog" name="ArrowsmithRedistrictDlgToolbox">
+ <class>CandRRedistrictDlgElectorates</class>
+ <widget class="QDialog" name="CandRRedistrictDlgElectorates">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -61,7 +61,7 @@
   <connection>
    <sender>boxButton</sender>
    <signal>accepted()</signal>
-   <receiver>ArrowsmithRedistrictDlgToolbox</receiver>
+   <receiver>CandRRedistrictDlgElectorates</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -77,7 +77,7 @@
   <connection>
    <sender>boxButton</sender>
    <signal>rejected()</signal>
-   <receiver>ArrowsmithRedistrictDlgToolbox</receiver>
+   <receiver>CandRRedistrictDlgElectorates</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

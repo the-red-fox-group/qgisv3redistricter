@@ -28,7 +28,8 @@ from builtins import object
 from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt, QFileInfo, QVariant
 from qgis.PyQt.QtWidgets import QAction, QDialogButtonBox, QTableWidget, QTableWidgetItem, QFileDialog, QMessageBox
 from qgis.PyQt.QtGui import QIcon, QColor
-from qgis.core import QgsProject, QgsMessageLog, QgsSymbol, QgsVectorLayer, QgsCategorizedSymbolRenderer, QgsSimpleFillSymbolLayer, QgsRendererCategory, QgsSpatialIndex, QgsField
+from qgis.core import QgsProject, QgsMessageLog, QgsSymbol, QgsVectorLayer, QgsCategorizedSymbolRenderer, \
+    QgsSimpleFillSymbolLayer, QgsRendererCategory, QgsSpatialIndex, QgsField, edit
 from qgis.gui import QgsMapCanvas, QgsMapToolEmitPoint, QgsMapTool, QgsMapToolIdentifyFeature
 #from qgis.analysis import QgsGeometryAnalyzer
 from random import randrange
@@ -43,6 +44,7 @@ from .CandRRedistrict_attrdockwidget import CandRRedistrictAttrDockWidget
 from .CandRRedistrict_dlgparameter import CandRRedistrictDlgParameter
 from .CandRRedistrict_dlgtoolbox import CandRRedistrictDlgToolbox
 from .CandRRedistrict_dlgelectorates import CandRRedistrictDlgElectorates
+
 import os.path
 
 dataFieldList = []
