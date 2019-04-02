@@ -25,15 +25,19 @@ from __future__ import absolute_import
 from builtins import str
 from builtins import range
 from builtins import object
+
 from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt, QFileInfo, QVariant
 from qgis.PyQt.QtWidgets import QAction, QDialogButtonBox, QTableWidget, QTableWidgetItem, QFileDialog, QMessageBox
 from qgis.PyQt.QtGui import QIcon, QColor
-from qgis.core import QgsProject, QgsMessageLog, QgsSymbol, QgsVectorLayer, QgsCategorizedSymbolRenderer, \
-    QgsSimpleFillSymbolLayer, QgsRendererCategory, QgsSpatialIndex, QgsField, edit
+from qgis.core import Qgis, QgsProject, QgsMessageLog, QgsSymbol, QgsVectorLayer, QgsCategorizedSymbolRenderer, \
+    QgsSimpleFillSymbolLayer, QgsRendererCategory, QgsSpatialIndex, QgsField, edit, QgsDistanceArea
 from qgis.gui import QgsMapCanvas, QgsMapToolEmitPoint, QgsMapTool, QgsMapToolIdentifyFeature
-#from qgis.analysis import QgsGeometryAnalyzer
+
 from random import randrange
+
+# Original code had uncommented
 #from . import ogr2ogr
+
 # Initialize Qt resources from file resources.py
 from . import resources
 import csv
@@ -87,10 +91,8 @@ class CandRRedistrict(object):
         # Save reference to the QGIS interface
         self.iface = iface
 
-#        QgsMapTool.__init(self, self.iface.mapCanvas())
         self.canvas = self.iface.mapCanvas()
         self.canvas.setMouseTracking(True)
-        
 
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
@@ -100,7 +102,8 @@ class CandRRedistrict(object):
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'CandRRedistrict_{}.qm'.format(locale))
+            'CandRRedistrict_{}.qm'.format(locale)
+        )
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -112,11 +115,12 @@ class CandRRedistrict(object):
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&C&&R Redistricter')
+
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'CandRRedistrict')
         self.toolbar.setObjectName(u'CandRRedistrict')
 
-        #print "** INITIALIZING CandRRedistrict"
+        # print "** INITIALIZING CandRRedistrict"
 
         # variables to initialise
         self.pluginIsActive = False
@@ -248,9 +252,11 @@ class CandRRedistrict(object):
         #print "** CLOSING CandRRedistrict"
 
         # disconnects
-        self.attrdockwidget.closingPlugin.disconnect(self.onClosePlugin)        
-        self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
-
+        try:
+            self.attrdockwidget.closingPlugin.disconnect(self.onClosePlugin)
+            self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        except:
+            pass
         # remove this statement if dockwidget is to remain
         # for reuse if plugin is reopened
         # Commented next statement since it causes QGIS crashe
@@ -280,6 +286,8 @@ class CandRRedistrict(object):
 
         if not self.pluginIsActive:
             self.pluginIsActive = True
+
+            QgsMessageLog().logMessage('Jake was here', level=Qgis.Info)
 
             #print "** STARTING CandRRedistrict"
 
@@ -338,7 +346,7 @@ class CandRRedistrict(object):
             self.attrdockwidget.show()
 
     def canvasReleaseEvent(self, event):
-        QgsMessageLog.logMessage("released!")
+        QgsMessageLog.logMessage('released!', level=Qgis.Info)
         with edit(self.activeLayer):
                 selection = self.activeLayer.selectedFeatures()
                 for feature in selection:
@@ -346,7 +354,7 @@ class CandRRedistrict(object):
 
     def updateAttributes(self):
         global locked
-        QgsMessageLog.logMessage("released!")
+        QgsMessageLog.logMessage('released!', level=Qgis.Info)
         selection = self.activeLayer.selectedFeatures()
         field_id = self.activeLayer.fields().indexFromName(self.distfield)
         self.activeLayer.startEditing()
