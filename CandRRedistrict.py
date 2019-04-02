@@ -670,13 +670,13 @@ class CandRRedistrict(object):
         QgsMessageLog.logMessage("Updating Table", level=Qgis.Info)
         global distPop
         print(distPop)
-        for p in range(0,self.districts+1):
-                #self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
-                self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtLabel[p])))
+        for p in range(1, self.districts + 1):
+                self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
                 self.attrdockwidget.tblPop.setItem(p,2,QTableWidgetItem(str(distPop[p])))
                 #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
                 self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p]-self.targetpop)))
                 #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
+                self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(districtLabel[p])))
 
 
 
@@ -948,6 +948,7 @@ class CandRRedistrict(object):
         districtLabel = {}
         districtName[0] = str("0")
         districtId[str("0")] = 0
+        districtLabel[0] = str("")
 
         #idx = self.activeLayer.fields().indexFromName(self.distfield)
 
