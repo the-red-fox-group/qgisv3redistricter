@@ -570,20 +570,24 @@ class CandRRedistrict(object):
         for d in dataFieldList:
                 numDataFields = numDataFields + 1
                 self.attrdockwidget.tblPop.setHorizontalHeaderItem(2+numDataFields,QTableWidgetItem(d.name))
-        self.attrdockwidget.tblPop.setColumnCount(5+numDataFields)
+        #### column count
+        self.attrdockwidget.tblPop.setColumnCount(6+numDataFields)
         for r in range(0,self.districts+1):
                 chkBoxItem = QTableWidgetItem()
                 chkBoxItem.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.Unchecked)       
-                self.attrdockwidget.tblPop.setItem(r,1,chkBoxItem)
-        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','District','Population','To Target'])
+                self.attrdockwidget.tblPop.setItem(r,1,chkBoxItem) ## lockbox
+        #self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','District','Population','To Target'])
+        #### column headers
+        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','District','Popn','V. Quota #','V. Quota %'])
+
         numDataFields = 0
         for d in dataFieldList:
                 numDataFields = numDataFields + 1
                 if d.type == 1:
-                        self.attrdockwidget.tblPop.setHorizontalHeaderItem(3+numDataFields,QTableWidgetItem(d.name))
+                        self.attrdockwidget.tblPop.setHorizontalHeaderItem(5+numDataFields,QTableWidgetItem(d.name)) ### column hard code
                 else:
-                        self.attrdockwidget.tblPop.setHorizontalHeaderItem(3+numDataFields,QTableWidgetItem(d.name + '%'))
+                        self.attrdockwidget.tblPop.setHorizontalHeaderItem(5+numDataFields,QTableWidgetItem(d.name + '%'))
 
 
         if len(districtName) == 0:
@@ -672,60 +676,62 @@ class CandRRedistrict(object):
         print(distPop)
         for p in range(1, self.districts + 1):
                 self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtName[p])))
-                self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtLabel[p])))
 
+                self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtLabel[p])))
                 self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])))
                 #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
                 self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(distPop[p]-self.targetpop)))
+
+                self.attrdockwidget.tblPop.setItem(p, 5, QTableWidgetItem(str(round(100*((distPop[p] - self.targetpop)/self.targetpop),1)) + '%'))
                 #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
 
-                self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(255, 255, 255))
-                self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(255, 255, 255))
-                self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(255, 255, 255))
-                self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(255, 255, 255))
-                self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(255, 255, 255))
-
-                if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
-                    self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(161, 215, 106))
-                    self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(161, 215, 106))
-                    self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(161, 215, 106))
-                    self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(161, 215, 106))
-                    self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(161, 215, 106))
-                if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
-                    self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(145, 191, 219))
+                # self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(255, 255, 255))
+                # self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(255, 255, 255))
+                # self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(255, 255, 255))
+                # self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(255, 255, 255))
+                # self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(255, 255, 255))
+                #
+                # if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
+                #     self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(161, 215, 106))
+                #     self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(161, 215, 106))
+                #     self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(161, 215, 106))
+                #     self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(161, 215, 106))
+                #     self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(161, 215, 106))
+                # if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
+                #     self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(145, 191, 219))
+                #     self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(145, 191, 219))
+                #     self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(145, 191, 219))
+                #     self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(145, 191, 219))
+                #     self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(1fg45, 191, 219))
                 rowNum = 0
                 for d in dataFieldList:
                         rowNum = rowNum + 1
                         if d.type == 1:
-                                self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem(str(d.field_sum[p])))
+                                self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem(str(d.field_sum[p]))) ## hard coded columns
                         elif d.type == 2:
                                 if distPop[p] > 0:
                                         QgsMessageLog.logMessage(str(d.field_sum[p]) + " " + str(distPop[p]))
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(distPop[p])) * 100,2))+'%'))
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(distPop[p])) * 100,2))+'%'))
                                 else:
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem('0.00%'))                
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem('0.00%'))
                         elif d.type == 3:
                                 if self.totalpop > 0:
                                         QgsMessageLog.logMessage(str(d.field_sum[p]) + " " + str(self.totalpop))
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(self.totalpop)) * 100,2))+'%'))
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(self.totalpop)) * 100,2))+'%'))
                                 else:
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem('0.00%'))
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem('0.00%'))
                         elif d.type == 4:
                                 if d.total_sum > 0:
                                         QgsMessageLog.logMessage(str(d.field_sum[p]) + " " + str(d.total_sum))
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(d.total_sum)) * 100,2))+'%'))
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem(str(round(float(float(d.field_sum[p]) / float(d.total_sum)) * 100,2))+'%'))
                                 else:
-                                        self.attrdockwidget.tblPop.setItem(p,3+rowNum,QTableWidgetItem('0.00%'))
+                                        self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem('0.00%'))
 
         self.attrdockwidget.tblPop.resizeColumnToContents(0)
         self.attrdockwidget.tblPop.resizeColumnToContents(1)
         self.attrdockwidget.tblPop.resizeColumnToContents(2)
         self.attrdockwidget.tblPop.resizeColumnToContents(3)
-        #self.attrdockwidget.tblPop.resizeColumnToContents(4)
+        self.attrdockwidget.tblPop.resizeColumnToContents(4)
 
     def addDataField(self):
         f = DataField([self.dlgparameters.cmbDataField.currentText(),self.dlgparameters.cmbDataType.currentText()])
@@ -854,8 +860,8 @@ class CandRRedistrict(object):
                         rowWriter.append(str(distPop[p]))
                         rowWriter.append(str(self.targetpop - distPop[p]))
                         for d in dataFieldList:
-                                if d.type == 1:
-                                        self.attrdockwidget.tblPop.setItem(p,3 + rowNum,QTableWidgetItem(str(d.field_sum[p])))
+                                if d.type == 1: ## column hard code
+                                        self.attrdockwidget.tblPop.setItem(p, 5 + rowNum,QTableWidgetItem(str(d.field_sum[p])))
                                 elif d.type == 2:
                                         if distPop[p] > 0:
                                                 QgsMessageLog.logMessage(str(d.field_sum[p]) + " " + str(distPop[p]))
