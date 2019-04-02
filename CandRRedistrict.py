@@ -649,10 +649,9 @@ class CandRRedistrict(object):
                         distPop[int(districtId[str(feature[self.distfield])])] = distPop[int(districtId[str(feature[self.distfield])])] + feature[self.popfield]
                 except:
                         try:
-                                distPop[0] = distPop[0] + feature[self.popfield]
+                            distPop[0] = distPop[0] + feature[self.popfield]
                         except:
-                                errors = 1
-#                        QgsMessageLog.logMessage(self.distfield + " failed on load")
+                            pass
                 for d in dataFieldList:
                         try:
                                 d.field_sum[int(districtId[str(feature[self.distfield])])] = d.field_sum[int(districtId[str(feature[self.distfield])])] + int(feature[d.name])
@@ -663,20 +662,25 @@ class CandRRedistrict(object):
 
 
     def updateTable(self):
-        QgsMessageLog.logMessage("Updating Table")
+        QgsMessageLog.logMessage("Updating Table", level=Qgis.Info)
         global distPop
         print(distPop)
         for p in range(0,self.districts+1):
                 self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
                 self.attrdockwidget.tblPop.setItem(p,2,QTableWidgetItem(str(distPop[p])))
-                self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
+                #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
+                self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])-self.targetpop))
                 self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(255,255,255))                        
                 self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(255,255,255))
                 self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(255,255,255))
-                if distPop[p] >= self.targetpoplower and distPop[p] <= self.targetpophigher:
-                        self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(0,200,0))                        
-                        self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(0,200,0))
-                        self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(0,200,0))    
+                if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
+                    self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(161, 215, 106))
+                    self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(161, 215, 106))
+                    self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(161, 215, 106))
+                if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
+                    self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(145, 191, 219))
                 rowNum = 0
                 for d in dataFieldList:
                         rowNum = rowNum + 1
