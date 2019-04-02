@@ -54,8 +54,8 @@ import os.path
 dataFieldList = []
 locked = {}
 districtId = {}
-districtLabels = {}
 districtName = {}
+districtLabels = {}
 distPop = {}
 
 class DataField(object):
@@ -139,6 +139,7 @@ class CandRRedistrict(object):
         self.activeLayer = None                #which layer is active - which layer we're reapportioning
         self.popfield = None                #the population field in the database
         self.distfield = None                #the district field in the database
+        self.distlabel = None
         self.totalpop = 0                #the total population
         self.targetpop = 0                #the target population
         self.targetpoppct = 0                #target population percentage tolerance
@@ -427,7 +428,7 @@ class CandRRedistrict(object):
                 layer_list.append(layer.name())
         self.dlgparameters.cmbActiveLayer.clear()
         self.dlgparameters.cmbActiveLayer.addItems(layer_list)
-        if self.activeLayer != None:
+        if self.activeLayer is not None:
                 self.dlgparameters.cmbActiveLayer.setCurrentIndex(self.dlgparameters.cmbActiveLayer.findText(self.activeLayer.name()))
                 self.setParameters()
 
@@ -435,7 +436,6 @@ class CandRRedistrict(object):
         self.dlgtoolbox.show()
 
     def saveParametersToFile(self):
-#        try:
         f = open(self.activeLayer.source() + '.qgis.red','w')
         f.write(str(self.districts) + '\n')
         f.write(str(self.totalpop) + '\n')
@@ -444,6 +444,7 @@ class CandRRedistrict(object):
         f.write(str(self.targetpophigher) + '\n')
         f.write(str(self.popfield) + '\n')
         f.write(str(self.distfield) + '\n')
+        f.write(str(self.distlabel) + '\n')
         counter = 0
         for d in dataFieldList:
                 counter = counter + 1
@@ -485,6 +486,7 @@ class CandRRedistrict(object):
                 self.targetpophigher = int(self.targetpophigher)
                 self.popfield = f.readline().rstrip()
                 self.distfield = f.readline().rstrip()
+                self.distlabel = f.readline().rstrip()
                 fieldparams = int(f.readline())
                 self.setParameters()
                 del dataFieldList[:]
@@ -568,13 +570,13 @@ class CandRRedistrict(object):
         for d in dataFieldList:
                 numDataFields = numDataFields + 1
                 self.attrdockwidget.tblPop.setHorizontalHeaderItem(2+numDataFields,QTableWidgetItem(d.name))
-        self.attrdockwidget.tblPop.setColumnCount(4+numDataFields)
+        self.attrdockwidget.tblPop.setColumnCount(5+numDataFields)
         for r in range(0,self.districts+1):
                 chkBoxItem = QTableWidgetItem()
                 chkBoxItem.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.Unchecked)       
                 self.attrdockwidget.tblPop.setItem(r,1,chkBoxItem)
-        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','Population','To Target'])
+        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','Population','To Target', 'District'])
         numDataFields = 0
         for d in dataFieldList:
                 numDataFields = numDataFields + 1
@@ -664,16 +666,20 @@ class CandRRedistrict(object):
                                 d.field_sum[0] = d.field_sum[0] + int(feature[d.name])
                                 d.total_sum = d.total_sum + int(feature[d.name])
 
-
     def updateTable(self):
         QgsMessageLog.logMessage("Updating Table", level=Qgis.Info)
         global distPop
         print(distPop)
         for p in range(0,self.districts+1):
-                self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
+                #self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
+                self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtLabel[p])))
                 self.attrdockwidget.tblPop.setItem(p,2,QTableWidgetItem(str(distPop[p])))
                 #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
                 self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p]-self.targetpop)))
+                #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
+
+
+
                 self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(255,255,255))                        
                 self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(255,255,255))
                 self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(255,255,255))
@@ -713,6 +719,7 @@ class CandRRedistrict(object):
         self.attrdockwidget.tblPop.resizeColumnToContents(1)
         self.attrdockwidget.tblPop.resizeColumnToContents(2)
         self.attrdockwidget.tblPop.resizeColumnToContents(3)
+        #self.attrdockwidget.tblPop.resizeColumnToContents(4)
 
     def addDataField(self):
         f = DataField([self.dlgparameters.cmbDataField.currentText(),self.dlgparameters.cmbDataType.currentText()])
@@ -930,22 +937,49 @@ class CandRRedistrict(object):
         # just to give the error checker something to do
         #        txtBox = ''
 
-
     def initializeElectorates(self):
         global districtId
         global districtName
-        QgsMessageLog.logMessage("initializeElectorates called")
+        global districtLabel
+        QgsMessageLog.logMessage("initializeElectorates called", level=Qgis.Info)
         counter = 1
         districtId = {}
         districtName = {}
+        districtLabel = {}
         districtName[0] = str("0")
         districtId[str("0")] = 0
+
+        #idx = self.activeLayer.fields().indexFromName(self.distfield)
+
+        ### one row per seat name
+        #### SUPER slow, needs some kind of speediness
+        for feature in self.activeLayer.getFeatures():
+            name = feature[self.distlabel]
+            did = feature[self.distfield]
+
+            if not districtLabel:
+                districtLabel[did] = name
+            else:
+                try:
+                    temp = districtLabel[id]
+                    pass
+                except:
+                    districtLabel[did] = name
+
+            QgsMessageLog.logMessage(format(districtLabel), level=Qgis.Critical)
+            #QgsMessageLog.logMessage('f '+ str(f),level=Qgis.Critical)
+
         for j in range(counter, self.districts+1):
-                districtName[counter] = str(counter)
-                districtId[str(counter)] = counter
-                counter = counter + 1
-        QgsMessageLog.logMessage(format(districtName))
-        QgsMessageLog.logMessage(format(districtId))
+            #QgsMessageLog.logMessage('here ', Qgis.Info)
+            QgsMessageLog.logMessage('counter ' + str(counter), level=Qgis.Info)
+            districtName[counter] = str(counter)
+            districtId[str(counter)] = counter
+            QgsMessageLog.logMessage('distlabel ' + format(self.distlabel), level=Qgis.Critical)
+            #districtLabel[str(counter)] = str(self.distlabel[counter])
+            counter = counter + 1
+        QgsMessageLog.logMessage(format(districtName), level=Qgis.Info)
+        QgsMessageLog.logMessage(format(districtId), level=Qgis.Info)
+        #QgsMessageLog.logMessage(format(districtLabel), level=Qgis.Critical)
         self.saveParametersToFile()
         self.updateFieldValues()
         self.updateTable()
@@ -970,9 +1004,9 @@ class CandRRedistrict(object):
                         QgsMessageLog.logMessage(i)
         if counter > self.districts:
                 for j in range(counter, self.districts):
-                        districtName[counter] = str(counter)
-                        districtId[str(counter)] = counter
-                        counter = counter + 1
+                    districtName[counter] = str(counter)
+                    districtId[str(counter)] = counter
+                    counter = counter + 1
         QgsMessageLog.logMessage(format(districtName))
         QgsMessageLog.logMessage(format(districtId))
         self.saveParametersToFile()
@@ -982,7 +1016,7 @@ class CandRRedistrict(object):
 
     def updateSelectedElectorate(self):
         self.dockwidget.lblActiveDistrict.setText("Click on the map...")
-        self.featIdentTool =  QgsMapToolIdentifyFeature(self.canvas)
+        self.featIdentTool = QgsMapToolIdentifyFeature(self.canvas)
         self.featIdentTool.featureIdentified.connect(self.toolbtnSelectAction)
         self.featIdentTool.setLayer(self.activeLayer)
         self.canvas.setMapTool(self.featIdentTool)
