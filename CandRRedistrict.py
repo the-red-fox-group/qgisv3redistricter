@@ -576,7 +576,7 @@ class CandRRedistrict(object):
                 chkBoxItem.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.Unchecked)       
                 self.attrdockwidget.tblPop.setItem(r,1,chkBoxItem)
-        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','Population','To Target', 'District'])
+        self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','District','Population','To Target'])
         numDataFields = 0
         for d in dataFieldList:
                 numDataFields = numDataFields + 1
@@ -671,26 +671,32 @@ class CandRRedistrict(object):
         global distPop
         print(distPop)
         for p in range(1, self.districts + 1):
-                self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
-                self.attrdockwidget.tblPop.setItem(p,2,QTableWidgetItem(str(distPop[p])))
+                self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtName[p])))
+                self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtLabel[p])))
+
+                self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])))
                 #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
-                self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p]-self.targetpop)))
+                self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(distPop[p]-self.targetpop)))
                 #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
-                self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(districtLabel[p])))
 
+                self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(255, 255, 255))
+                self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(255, 255, 255))
+                self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(255, 255, 255))
+                self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(255, 255, 255))
+                self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(255, 255, 255))
 
-
-                self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(255,255,255))                        
-                self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(255,255,255))
-                self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(255,255,255))
                 if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
                     self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(161, 215, 106))
+                    self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(161, 215, 106))
                     self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(161, 215, 106))
                     self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(161, 215, 106))
+                    self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(161, 215, 106))
                 if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
-                    self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(145, 191, 219))
-                    self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(145, 191, 219))
+                    self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(145, 191, 219))
                 rowNum = 0
                 for d in dataFieldList:
                         rowNum = rowNum + 1
