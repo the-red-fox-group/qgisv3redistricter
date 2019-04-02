@@ -669,7 +669,7 @@ class CandRRedistrict(object):
                 self.attrdockwidget.tblPop.setItem(p,0,QTableWidgetItem(str(districtName[p])))
                 self.attrdockwidget.tblPop.setItem(p,2,QTableWidgetItem(str(distPop[p])))
                 #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
-                self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])-self.targetpop))
+                self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p]-self.targetpop)))
                 self.attrdockwidget.tblPop.item(p,0).setBackground(QColor(255,255,255))                        
                 self.attrdockwidget.tblPop.item(p,2).setBackground(QColor(255,255,255))
                 self.attrdockwidget.tblPop.item(p,3).setBackground(QColor(255,255,255))
