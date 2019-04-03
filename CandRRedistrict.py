@@ -526,7 +526,6 @@ class CandRRedistrict(object):
         self.dlgparameters.inpDistricts.setValue(self.districts)
         self.dlgparameters.cmbPopField.setCurrentIndex((self.dlgparameters.cmbPopField.findText(self.popfield)))
         self.dlgparameters.cmbDistField.setCurrentIndex((self.dlgparameters.cmbDistField.findText(self.distfield)))
-        self.dlgparameters.cmbDistLabel.setCurrentIndex((self.dlgparameters.cmbDistLabel.findText(self.distlabel)))
         self.updateFieldTable()
 
     def updateDistricts(self):
@@ -564,7 +563,6 @@ class CandRRedistrict(object):
         self.dockwidget.sliderDistricts.setValue(1)
         self.popfield = self.dlgparameters.cmbPopField.currentText()
         self.distfield = self.dlgparameters.cmbDistField.currentText()
-        self.distlabel = self.dlgparameters.cmbDistLabel.currentText()
         # self.dispfield1 = self.dlgparameters.cmbDispField1.currentText()
         # self.dispfield2 = self.dlgparameters.cmbDispField1.currentText()
         # QgsMessageLog.logMessage("Popfield:" + str(self.popfield), level=Qgis.Info)
@@ -792,7 +790,6 @@ class CandRRedistrict(object):
         print("updateFields")
         self.dlgparameters.cmbPopField.clear()
         self.dlgparameters.cmbDistField.clear()
-        self.dlgparameters.cmbDistLabel.clear()
         self.dlgparameters.cmbDataField.clear()
         self.dlgparameters.cmbDataType.clear()
 #        self.dlgparameters.cmbDispField1.clear()
@@ -805,7 +802,6 @@ class CandRRedistrict(object):
         field_names = [field.name() for field in fields]
         self.dlgparameters.cmbPopField.addItems(field_names)
         self.dlgparameters.cmbDistField.addItems(field_names)
-        self.dlgparameters.cmbDistLabel.addItems(field_names)
 #        self.dlgparameters.cmbDispField1.addItems(["None"])
 #        self.dlgparameters.cmbDispField2.addItems(["None"])
         self.dlgparameters.cmbDataField.addItems(field_names)

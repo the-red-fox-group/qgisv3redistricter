@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>721</width>
-    <height>569</height>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -151,7 +151,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>280</y>
+     <y>220</y>
      <width>241</width>
      <height>30</height>
     </rect>
@@ -206,7 +206,7 @@
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>280</y>
+     <y>220</y>
      <width>251</width>
      <height>30</height>
     </rect>
@@ -216,7 +216,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>280</y>
+     <y>220</y>
      <width>121</width>
      <height>20</height>
     </rect>
@@ -229,7 +229,7 @@
    <property name="geometry">
     <rect>
      <x>640</x>
-     <y>280</y>
+     <y>220</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -242,7 +242,7 @@
    <property name="geometry">
     <rect>
      <x>640</x>
-     <y>320</y>
+     <y>260</y>
      <width>31</width>
      <height>31</height>
     </rect>
@@ -271,9 +271,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>320</y>
+     <y>260</y>
      <width>621</width>
-     <height>171</height>
+     <height>231</height>
     </rect>
    </property>
    <property name="selectionMode">
@@ -306,29 +306,6 @@
    </property>
    <property name="text">
     <string>New</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>220</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>District Label:</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cmbDistLabel">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>220</y>
-     <width>501</width>
-     <height>30</height>
-    </rect>
    </property>
   </widget>
  </widget>
