@@ -20,11 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-from __future__ import print_function
-from __future__ import absolute_import
-from builtins import str
-from builtins import range
-from builtins import object
+#from __future__ import print_function
+#from __future__ import absolute_import
 
 from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt, QFileInfo, QVariant
 from qgis.PyQt.QtWidgets import QAction, QDialogButtonBox, QTableWidget, QTableWidgetItem, QFileDialog, QMessageBox
@@ -1040,6 +1037,7 @@ class CandRRedistrict(object):
         self.updateFieldValues()
         self.updateTable()
         self.updateLockedFields()
+
     def updateElectorates(self):
         global districtId
         global districtName
