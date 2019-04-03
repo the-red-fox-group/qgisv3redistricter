@@ -752,41 +752,6 @@ class CandRRedistrict(object):
 	else:
 		self.dlgparameters.btnLoadParameters.setEnabled(False)
 
-
-    def showCompactness(self):
-        field_id = self.activeLayer.fieldNameIndex(self.distfield)
-        QgsMessageLog.logMessage("Starting...")
-        QgsMessageLog.logMessage(self.activeLayer.source())
-        QgsMessageLog.logMessage(self.activeLayer.name())
-	ogr2ogr.main(['',self.activeLayer.name() + '_compactness.shp',self.activeLayer.source(),'-dialect','sqlite','-sql','SELECT ST_Union(geometry), ' + self.distfield + ' from ' + self.activeLayer.name() + ' GROUP BY ' + self.distfield])
-        QgsMessageLog.logMessage("...done.")
-#        QgsGeometryAnalyzer().dissolve(self.activeLayer, self.activeLayer.name() + "_compactness.shp", onlySelectedFeatures=False,uniqueIdField=field_id, p=True)
-        comp_layer = QgsVectorLayer(self.activeLayer.name() + "_compactness.shp","Compactness Report","ogr")
-	if comp_layer.isValid():
-	        QgsMessageLog.logMessage("valid layer!.")
-		comp_layer.startEditing()
-		comp_layer.dataProvider().addAttributes([QgsField("Area",QVariant.Double), QgsField("Perimeter",QVariant.Double),QgsField("Contiguous",QVariant.Int)] )
-		comp_layer.updateFields()
-		area = 0
-		for feature in comp_layer.getFeatures():
-			calculator = QgsDistanceArea()
-			calculator.setEllipsoid('WGS84')
-			calculator.setEllipsoidalMode(True)
-			calculator.computeAreaInit()
-			geom = gFeat.geometry()
-			landArea = feature['Area']
-			if geom.isMultipart():
-				polyg = geom.asPolygon()
-				if len(polyg) > 0:
-					area = calculator.measurePolygon(polyg[0])
-					landArea = area
-			else:
-			        multi = geom.asMultiPolygon()
-				for polyg in multi:
-					area = area + calculator.measurePolygon(polyg[0])
-				landArea = area
-		comp_layer.commitChanges()
-
     def setEraser(self):
         if self.activedistrict == 0:
                 self.activedistrict = self.dockwidget.sliderDistricts.value()
