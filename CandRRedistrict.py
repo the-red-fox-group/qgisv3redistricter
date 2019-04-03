@@ -670,40 +670,34 @@ class CandRRedistrict(object):
                                 d.field_sum[0] = d.field_sum[0] + int(feature[d.name])
                                 d.total_sum = d.total_sum + int(feature[d.name])
 
+    def change_cell_background_color(self, p, colour):
+        for c in range(0, self.attrdockwidget.tblPop.columnCount()):
+            try:
+                self.attrdockwidget.tblPop.item(p, c).setBackground(colour)
+            except:
+                pass
+
     def updateTable(self):
         QgsMessageLog.logMessage("Updating Table", level=Qgis.Info)
         global distPop
         print(distPop)
         for p in range(1, self.districts + 1):
                 self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtName[p])))
-
+                # column 1 is the lock column
                 self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtLabel[p])))
                 self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])))
-                #self.attrdockwidget.tblPop.setItem(p,3,QTableWidgetItem(str(self.targetpop - distPop[p])))
                 self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(distPop[p]-self.targetpop)))
-
                 self.attrdockwidget.tblPop.setItem(p, 5, QTableWidgetItem(str(round(100*((distPop[p] - self.targetpop)/self.targetpop),1)) + '%'))
-                #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
 
-                for c in range(0, self.attrdockwidget.tblPop.columnCount()):
-                    try:
-                        self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(255, 255, 255))
-                    except:
-                        pass
+                self.change_cell_background_color(p, QColor(255, 255, 255))
 
+                # under quota, but within tolerance, green
                 if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
-                    for c in range(0, self.attrdockwidget.tblPop.columnCount()):
-                        try:
-                            self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(161, 215, 106))
-                        except:
-                            pass
+                    self.change_cell_background_color(p, QColor(161, 215, 106))
 
+                # over quota, but within tolerance, blue
                 if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
-                    for c in range(0, self.attrdockwidget.tblPop.columnCount()):
-                        try:
-                            self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(145, 191, 219))
-                        except:
-                            pass
+                    self.change_cell_background_color(p, QColor(145, 191, 219))
 
                 rowNum = 0
                 for d in dataFieldList:
