@@ -575,7 +575,7 @@ class CandRRedistrict(object):
         for r in range(0,self.districts+1):
                 chkBoxItem = QTableWidgetItem()
                 chkBoxItem.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-                chkBoxItem.setCheckState(Qt.Unchecked)       
+                chkBoxItem.setCheckState(Qt.Unchecked)
                 self.attrdockwidget.tblPop.setItem(r,1,chkBoxItem) ## lockbox
         #self.attrdockwidget.tblPop.setHorizontalHeaderLabels(['#','Lock','District','Population','To Target'])
         #### column headers
@@ -685,24 +685,26 @@ class CandRRedistrict(object):
                 self.attrdockwidget.tblPop.setItem(p, 5, QTableWidgetItem(str(round(100*((distPop[p] - self.targetpop)/self.targetpop),1)) + '%'))
                 #self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(self.distlabel[p])))
 
-                # self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(255, 255, 255))
-                # self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(255, 255, 255))
-                # self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(255, 255, 255))
-                # self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(255, 255, 255))
-                # self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(255, 255, 255))
-                #
-                # if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
-                #     self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(161, 215, 106))
-                #     self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(161, 215, 106))
-                #     self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(161, 215, 106))
-                #     self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(161, 215, 106))
-                #     self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(161, 215, 106))
-                # if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
-                #     self.attrdockwidget.tblPop.item(p, 0).setBackground(QColor(145, 191, 219))
-                #     self.attrdockwidget.tblPop.item(p, 1).setBackground(QColor(145, 191, 219))
-                #     self.attrdockwidget.tblPop.item(p, 2).setBackground(QColor(145, 191, 219))
-                #     self.attrdockwidget.tblPop.item(p, 3).setBackground(QColor(145, 191, 219))
-                #     self.attrdockwidget.tblPop.item(p, 4).setBackground(QColor(1fg45, 191, 219))
+                for c in range(0, self.attrdockwidget.tblPop.columnCount()):
+                    try:
+                        self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(255, 255, 255))
+                    except:
+                        pass
+
+                if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
+                    for c in range(0, self.attrdockwidget.tblPop.columnCount()):
+                        try:
+                            self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(161, 215, 106))
+                        except:
+                            pass
+
+                if distPop[p] <= self.targetpophigher and distPop[p] > self.targetpop:
+                    for c in range(0, self.attrdockwidget.tblPop.columnCount()):
+                        try:
+                            self.attrdockwidget.tblPop.item(p, c).setBackground(QColor(145, 191, 219))
+                        except:
+                            pass
+
                 rowNum = 0
                 for d in dataFieldList:
                         rowNum = rowNum + 1
@@ -770,7 +772,7 @@ class CandRRedistrict(object):
 
 
                 tblRows = tblRows + 1
-        
+
     def updateFields(self):
         print("updateFields")
         self.dlgparameters.cmbPopField.clear()
@@ -790,7 +792,7 @@ class CandRRedistrict(object):
         self.dlgparameters.cmbDistField.addItems(field_names)
         self.dlgparameters.cmbDistLabel.addItems(field_names)
 #        self.dlgparameters.cmbDispField1.addItems(["None"])
-#        self.dlgparameters.cmbDispField2.addItems(["None"])        
+#        self.dlgparameters.cmbDispField2.addItems(["None"])
         self.dlgparameters.cmbDataField.addItems(field_names)
         self.dlgparameters.cmbDataType.addItems(['Sum','% of Dist. Pop','% of Total Pop','% of Field'])
  #       self.dlgparameters.cmbDispField2.addItems(field_names)
@@ -918,7 +920,7 @@ class CandRRedistrict(object):
                                 # For our purpose we consider a feature as 'neighbor' if it touches or
                                 # intersects a feature. We use the 'disjoint' predicate to satisfy
                                 # these conditions. So if a feature is not disjoint, it is a neighbor.
-                                if (f != intersecting_f and not intersecting_f.geometry().disjoint(geom)): 
+                                if (f != intersecting_f and not intersecting_f.geometry().disjoint(geom)):
                                         if intersecting_f[self.distfield] > 0:
                                                 QgsMessageLog.logMessage("Neighbor found with > 0!")
                                                 if neighbors_district == -1:
