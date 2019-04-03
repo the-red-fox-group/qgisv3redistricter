@@ -1036,7 +1036,10 @@ class CandRRedistrict(object):
                     #QgsMessageLog.logMessage('Another Districtz ' + format(districtNameLabels), level=Qgis.Critical)
 
         QgsMessageLog.logMessage('Get District Names Runs\r\n' + format(districtNameLabels), level=Qgis.Critical)
-
+        self.saveParametersToFile()
+        self.updateFieldValues()
+        self.updateTable()
+        self.updateLockedFields()
     def updateElectorates(self):
         global districtId
         global districtName
