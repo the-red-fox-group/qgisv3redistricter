@@ -112,6 +112,13 @@ No active number of districts to create</string>
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QPushButton" name="btnDistrictLabels">
+      <property name="text">
+       <string>OLDClick Here for District Labels</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>

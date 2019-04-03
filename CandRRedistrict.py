@@ -336,6 +336,8 @@ class CandRRedistrict(object):
 
             self.dlgtoolbox.btnExportToCsv.clicked.connect(self.exportToCsv)
             self.dlgtoolbox.btnRename.clicked.connect(self.renameElectorates)
+            self.dlgtoolbox.btnDistrictLabels.clicked.connect(self.get_district_names)
+
 
             self.dlgelectorates.boxButton.button(QDialogButtonBox.Ok).clicked.connect(self.updateElectorates)
 
@@ -948,7 +950,7 @@ class CandRRedistrict(object):
         global districtId
         global districtName
         global districtLabel
-        QgsMessageLog.logMessage("initializeElectorates called", level=Qgis.Info)
+        #QgsMessageLog.logMessage("initializeElectorates called", level=Qgis.Info)
         counter = 1
         districtId = {}
         districtName = {}
@@ -974,7 +976,7 @@ class CandRRedistrict(object):
                 except:
                     districtLabel[did] = name
 
-            QgsMessageLog.logMessage(format(districtLabel), level=Qgis.Critical)
+            #QgsMessageLog.logMessage(format(districtLabel), level=Qgis.Critical)
             #QgsMessageLog.logMessage('f '+ str(f),level=Qgis.Critical)
 
         for j in range(counter, self.districts+1):
@@ -992,6 +994,25 @@ class CandRRedistrict(object):
         self.updateFieldValues()
         self.updateTable()
 
+    def get_district_names(self):
+        try:
+            for feature in self.activeLayer.getFeatures():
+                name = feature[self.distlabel]
+                did = feature[self.distfield]
+
+                if not districtLabel:
+                    districtLabel[did] = name
+                    QgsMessageLog.logMessage('First District ' + format(districtLabel), level=Qgis.Critical)
+
+                else:
+                    try:
+                        temp = districtLabel[id]
+                        pass
+                    except:
+                        districtLabel[did] = name
+                        QgsMessageLog.logMessage('Another District ' + format(districtLabel), level=Qgis.Critical)
+        except:
+            pass
 
     def updateElectorates(self):
         global districtId
