@@ -1011,22 +1011,15 @@ class CandRRedistrict(object):
     def get_district_names(self):
         global districtLabel
         districtLabel = {}
-        districtLabel[0] = str("")
 
-        QgsMessageLog.logMessage('Get District Names Runs', level=Qgis.Critical)
-
-        # get layer
         layers = [tree_layer.layer() for tree_layer in QgsProject.instance().layerTreeRoot().findLayers()]
         selectedLayerIndex = self.dlgtoolbox.cmbDistrictNames.currentIndex()
         selectedLayer = layers[selectedLayerIndex]
         self.districtLabelLayer = selectedLayer
 
-        #try:
         for feature in self.districtLabelLayer.getFeatures():
             name = feature['name']
             did = feature['id']
-
-
 
             if not districtLabel:
                 districtLabel[did] = name
@@ -1039,11 +1032,8 @@ class CandRRedistrict(object):
                 except:
                     districtLabel[did] = name
                     QgsMessageLog.logMessage('Another Districtz ' + format(districtLabel), level=Qgis.Critical)
-        #except:
-        #   pass
 
-        QgsMessageLog.logMessage('Get District Names Runs2', level=Qgis.Critical)
-
+        QgsMessageLog.logMessage('Get District Names Runs\r\n' + format(districtLabel), level=Qgis.Critical)
 
     def updateElectorates(self):
         global districtId
