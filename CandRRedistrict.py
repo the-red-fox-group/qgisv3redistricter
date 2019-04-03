@@ -549,10 +549,10 @@ class CandRRedistrict(object):
         self.popfield = self.dlgparameters.cmbPopField.currentText()
         self.distfield = self.dlgparameters.cmbDistField.currentText()
         self.distlabel = self.dlgparameters.cmbDistLabel.currentText()
-#        self.dispfield1 = self.dlgparameters.cmbDispField1.currentText()
- #       self.dispfield2 = self.dlgparameters.cmbDispField1.currentText()
-        QgsMessageLog.logMessage("Popfield:" + str(self.popfield), level=Qgis.Info)
-        QgsMessageLog.logMessage("Dist Labels:" + str(self.distlabel), level=Qgis.Critical)
+        # self.dispfield1 = self.dlgparameters.cmbDispField1.currentText()
+        # self.dispfield2 = self.dlgparameters.cmbDispField1.currentText()
+        # QgsMessageLog.logMessage("Popfield:" + str(self.popfield), level=Qgis.Info)
+        # QgsMessageLog.logMessage("Dist Labels:" + str(self.distlabel), level=Qgis.Critical)
         self.totalpop = 0
         self.targetpop = 0
         for feature in self.activeLayer.getFeatures():
@@ -588,7 +588,6 @@ class CandRRedistrict(object):
                         self.attrdockwidget.tblPop.setHorizontalHeaderItem(5+numDataFields,QTableWidgetItem(d.name)) ### column hard code
                 else:
                         self.attrdockwidget.tblPop.setHorizontalHeaderItem(5+numDataFields,QTableWidgetItem(d.name + '%'))
-
 
         if len(districtName) == 0:
                 self.initializeElectorates()
@@ -677,6 +676,9 @@ class CandRRedistrict(object):
             except:
                 pass
 
+    def resize_column_to_contents(self, p):
+        self.attrdockwidget.tblPop.resizeColumnToContents(p)
+
     def updateTable(self):
         QgsMessageLog.logMessage("Updating Table", level=Qgis.Info)
         global distPop
@@ -723,11 +725,8 @@ class CandRRedistrict(object):
                                 else:
                                         self.attrdockwidget.tblPop.setItem(p,5+rowNum,QTableWidgetItem('0.00%'))
 
-        self.attrdockwidget.tblPop.resizeColumnToContents(0)
-        self.attrdockwidget.tblPop.resizeColumnToContents(1)
-        self.attrdockwidget.tblPop.resizeColumnToContents(2)
-        self.attrdockwidget.tblPop.resizeColumnToContents(3)
-        self.attrdockwidget.tblPop.resizeColumnToContents(4)
+                # resize columns to fit contents
+                self.resize_column_to_contents(p)
 
     def addDataField(self):
         f = DataField([self.dlgparameters.cmbDataField.currentText(),self.dlgparameters.cmbDataType.currentText()])
