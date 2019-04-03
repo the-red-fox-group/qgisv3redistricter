@@ -702,15 +702,18 @@ class CandRRedistrict(object):
         for p in range(1, self.districts + 1):
                 self.attrdockwidget.tblPop.setItem(p, 0, QTableWidgetItem(str(districtName[p])))
                 # column 1 is the lock column
-                self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtName[p])))
+                self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem('District ' + str(p)))
                 self.attrdockwidget.tblPop.setItem(p, 3, QTableWidgetItem(str(distPop[p])))
                 self.attrdockwidget.tblPop.setItem(p, 4, QTableWidgetItem(str(distPop[p]-self.targetpop)))
                 self.attrdockwidget.tblPop.setItem(p, 5, QTableWidgetItem(str(round(100*((distPop[p] - self.targetpop)/self.targetpop),1)) + '%'))
 
                 self.change_cell_background_color(p, QColor(255, 255, 255))
 
-                if districtNameLabels:
-                    self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtNameLabels[p])))
+                try:
+                    if districtNameLabels:
+                        self.attrdockwidget.tblPop.setItem(p, 2, QTableWidgetItem(str(districtNameLabels[p])))
+                except:
+                    pass
 
                 # under quota, but within tolerance, green
                 if distPop[p] >= self.targetpoplower and distPop[p] < self.targetpop:
