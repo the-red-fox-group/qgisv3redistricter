@@ -146,6 +146,8 @@ class CandRRedistrict(object):
         self.targetpoplower = 0                #target pop lower bound
         self.targetpophigher = 0                #target pop upper bound
 
+        self.districtLabelLayer = None
+
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -961,15 +963,15 @@ class CandRRedistrict(object):
     def initializeElectorates(self):
         global districtId
         global districtName
-        global districtLabel
+        #global districtLabel
         #QgsMessageLog.logMessage("initializeElectorates called", level=Qgis.Info)
         counter = 1
         districtId = {}
         districtName = {}
-        districtLabel = {}
+        #districtLabel = {}
         districtName[0] = str("0")
         districtId[str("0")] = 0
-        districtLabel[0] = str("")
+        #districtLabel[0] = str("")
 
         #idx = self.activeLayer.fields().indexFromName(self.distfield)
 
@@ -1007,54 +1009,41 @@ class CandRRedistrict(object):
         self.updateTable()
 
     def get_district_names(self):
+        global districtLabel
+        districtLabel = {}
+        districtLabel[0] = str("")
+
         QgsMessageLog.logMessage('Get District Names Runs', level=Qgis.Critical)
 
+        # get layer
         layers = [tree_layer.layer() for tree_layer in QgsProject.instance().layerTreeRoot().findLayers()]
-        selectedLayerIndex = self.dlgparameters.cmbDistrictNames.currentIndex()
+        selectedLayerIndex = self.dlgtoolbox.cmbDistrictNames.currentIndex()
         selectedLayer = layers[selectedLayerIndex]
+        self.districtLabelLayer = selectedLayer
 
-        QgsMessageLog.logMessage(format(selectedLayer), level=Qgis.Critical)
-
-        #fields = selectedLayer.fields()
-        #field_names = [field.name() for field in fields]
-        #self.dlgparameters.cmbPopField.addItems(field_names)
-        #self.dlgparameters.cmbDistField.addItems(field_names)
-        #self.dlgparameters.cmbDistLabel.addItems(field_names)
-        #        self.dlgparameters.cmbDispField1.addItems(["None"])
-        #        self.dlgparameters.cmbDispField2.addItems(["None"])
-        #self.dlgparameters.cmbDataField.addItems(field_names)
-        #self.dlgparameters.cmbDataType.addItems(['Sum', '% of Dist. Pop', '% of Total Pop', '% of Field'])
-        #       self.dlgparameters.cmbDispField2.addItems(field_names)
-        #selectedLayerIndex = self.dlgparameters.cmbActiveLayer.currentIndex()
-        #selectedLayer = layers[selectedLayerIndex]
-
-        #loadFile = selectedLayer.source() + '.qgis.red'
-        #QgsMessageLog.logMessage('loadfile: ' + loadFile)
-        #if os.path.isfile(loadFile) == True:
-        #    self.dlgparameters.btnLoadParameters.setEnabled(True)
-        #else:
-        #    self.dlgparameters.btnLoadParameters.setEnabled(False)
+        #try:
+        for feature in self.districtLabelLayer.getFeatures():
+            name = feature['name']
+            did = feature['id']
 
 
 
-        # try:
-        #     for feature in self.activeLayer.getFeatures():
-        #         name = feature[self.distlabel]
-        #         did = feature[self.distfield]
-        #
-        #         if not districtLabel:
-        #             districtLabel[did] = name
-        #             QgsMessageLog.logMessage('First District ' + format(districtLabel), level=Qgis.Critical)
-        #
-        #         else:
-        #             try:
-        #                 temp = districtLabel[id]
-        #                 pass
-        #             except:
-        #                 districtLabel[did] = name
-        #                 QgsMessageLog.logMessage('Another District ' + format(districtLabel), level=Qgis.Critical)
-        # except:
-        #     pass
+            if not districtLabel:
+                districtLabel[did] = name
+                QgsMessageLog.logMessage('First Districtz ' + format(districtLabel), level=Qgis.Critical)
+
+            else:
+                try:
+                    temp = districtLabel[id]
+                    pass
+                except:
+                    districtLabel[did] = name
+                    QgsMessageLog.logMessage('Another Districtz ' + format(districtLabel), level=Qgis.Critical)
+        #except:
+        #   pass
+
+        QgsMessageLog.logMessage('Get District Names Runs2', level=Qgis.Critical)
+
 
     def updateElectorates(self):
         global districtId
